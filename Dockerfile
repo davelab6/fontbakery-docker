@@ -61,7 +61,7 @@ RUN     pip install six==1.6.1
 RUN     cd /var/www/fontbakery && VENVRUN=virtualenv make setup
 RUN     cd /var/www/fontbakery && VENVRUN=virtualenv make init
 RUN     npm install -g bower
-RUN     cd /var/www/fontbakery/static; bower install
+RUN     cd /var/www/fontbakery/static; bower install --allow-root
 
 
 USER    postgres
