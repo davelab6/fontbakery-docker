@@ -44,12 +44,13 @@ RUN     echo "GITHUB_CONSUMER_SECRET = 'ec494ff274b5a5c7b0cb7563870e4a32874d93a6
 RUN     echo "SQLALCHEMY_ECHO = True" >> /var/www/fontbakery/local.cfg
 RUN     echo LANG="en_US.UTF-8" > /etc/default/locale
 
+# Install `six` packer over another packages
+RUN     pip install six
 RUN     cd /var/www/fontbakery && VENVRUN=virtualenv make setup
 RUN     cd /var/www/fontbakery && VENVRUN=virtualenv make init
 RUN     npm install -g bower
 RUN     cd /var/www/fontbakery/static; bower install
 
-CMD     supervisord
 
 USER    postgres
 
@@ -76,3 +77,5 @@ EXPOSE  8080
 
 # Add VOLUMEs to allow backup of config, logs and databases
 VOLUME  ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql"]
+
+CMD     supervisord
