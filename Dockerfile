@@ -21,26 +21,9 @@ RUN     apt-get update
 RUN     apt-get -y -q install python-software-properties software-properties-common
 RUN     apt-get -y -q install postgresql-9.3 postgresql-client-9.3 postgresql-contrib-9.3
 
-USER    postgres
-
-RUN     mkdir /var/www/
-
 RUN     DEBIAN_FRONTEND=noninteractive  apt-get install -y build-essential python python-virtualenv python-pip libevent-2.0-5 libevent-dev fontforge python-fontforge fonttools redis-server curl git mercurial nodejs libxslt1-dev libxml2-dev automake autoconf libtool libharfbuzz-dev libharfbuzz-dev qt5-default libffi-dev supervisor openssh-server unzip npm
 
-# Create a PostgreSQL role named ``docker`` with ``docker`` as the password and
-# then create a database `docker` owned by the ``docker`` role.
-# Note: here we use ``&&\`` to run commands one after the other - the ``\``
-#       allows the RUN command to span multiple lines.
-RUN    /etc/init.d/postgresql start &&\
-    psql --command "CREATE USER docker WITH SUPERUSER PASSWORD 'docker';" &&\
-    createdb -O docker docker
-
-# Adjust PostgreSQL configuration so that remote connections to the
-# database are possible.
-RUN     echo "host all  all    0.0.0.0/0  md5" >> /etc/postgresql/9.3/main/pg_hba.conf
-
-# And add ``listen_addresses`` to ``/etc/postgresql/9.3/main/postgresql.conf``
-RUN     echo "listen_addresses='*'" >> /etc/postgresql/9.3/main/postgresql.conf
+RUN     mkdir /var/www/
 
 ADD     supervisord.conf     /etc/supervisor/conf.d/
 
@@ -66,6 +49,25 @@ RUN     cd /var/www/fontbakery && VENVRUN=virtualenv make init
 RUN     npm install -g bower
 RUN     cd /var/www/fontbakery/static; bower install
 
+CMD     supervisord
+
+USER    postgres
+
+# Create a PostgreSQL role named ``docker`` with ``docker`` as the password and
+# then create a database `docker` owned by the ``docker`` role.
+# Note: here we use ``&&\`` to run commands one after the other - the ``\``
+#       allows the RUN command to span multiple lines.
+RUN    /etc/init.d/postgresql start &&\
+    psql --command "CREATE USER docker WITH SUPERUSER PASSWORD 'docker';" &&\
+    createdb -O docker docker
+
+# Adjust PostgreSQL configuration so that remote connections to the
+# database are possible.
+RUN     echo "host all  all    0.0.0.0/0  md5" >> /etc/postgresql/9.3/main/pg_hba.conf
+
+# And add ``listen_addresses`` to ``/etc/postgresql/9.3/main/postgresql.conf``
+RUN     echo "listen_addresses='*'" >> /etc/postgresql/9.3/main/postgresql.conf
+
 # Expose the PostgreSQL port
 EXPOSE  5432
 
@@ -74,5 +76,3 @@ EXPOSE  8080
 
 # Add VOLUMEs to allow backup of config, logs and databases
 VOLUME  ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql"]
-
-CMD     supervisord
