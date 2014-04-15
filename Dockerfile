@@ -25,6 +25,8 @@ RUN     DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential python
 
 RUN     mkdir /var/www/
 RUN     mkdir /var/run/sshd
+
+# After install please change root password to your own
 RUN     echo 'root:screencast' |chpasswd
 
 ADD     supervisord.conf     /etc/supervisor/conf.d/
