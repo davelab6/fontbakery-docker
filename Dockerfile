@@ -27,7 +27,7 @@ RUN     mkdir /var/www/
 
 ADD     supervisord.conf     /etc/supervisor/conf.d/
 
-ADD     https://github.com/googlefonts/fontbakery/archive/master.zip
+ADD     https://github.com/googlefonts/fontbakery/archive/master.zip /master.zip
 RUN     unzip master.zip
 RUN     mkdir -p /var/www/
 RUN     mv -R fontbakery-master /var/www/fontbakery
