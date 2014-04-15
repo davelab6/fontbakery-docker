@@ -34,7 +34,7 @@ RUN     mv fontbakery-master /var/www/fontbakery
 
 # Write configuration for Flask to local. This is initial file and
 # MUST be changed to your needs manually
-RUN     echo "import os" > /var/www/fontbakert/local.cfg
+RUN     echo "import os" > /var/www/fontbakery/local.cfg
 RUN     echo "ROOT = os.path.realpath(os.path.dirname(__file__))" >> /var/www/fontbakery/local.cfg
 RUN     echo "SQLALCHEMY_DATABASE_URI = 'postgresql://docker:docker@localhost/docker'\n" >> /var/www/fontbakery/local.cfg
 RUN     echo "DATA_ROOT = os.path.realpath(os.path.join(ROOT, "..", "data"))\n" >> /var/www/fontbakery/local.cfg
