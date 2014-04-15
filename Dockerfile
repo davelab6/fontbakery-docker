@@ -73,7 +73,7 @@ RUN     echo "listen_addresses='*'" >> /etc/postgresql/9.3/main/postgresql.conf
 EXPOSE  5432
 
 # Expose web server
-EXPOSE  8080
+EXPOSE  5000
 
 # Add VOLUMEs to allow backup of config, logs and databases
 VOLUME  ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql"]
