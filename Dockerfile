@@ -30,7 +30,7 @@ ADD     supervisord.conf     /etc/supervisor/conf.d/
 ADD     https://github.com/googlefonts/fontbakery/archive/master.zip /master.zip
 RUN     unzip master.zip
 RUN     mkdir -p /var/www/
-RUN     mv -R fontbakery-master /var/www/fontbakery
+RUN     mv fontbakery-master /var/www/fontbakery
 
 # Write configuration for Flask to local. This is initial file and
 # MUST be changed to your needs manually
