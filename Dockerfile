@@ -21,9 +21,11 @@ RUN     apt-get update
 RUN     apt-get -y -q install python-software-properties software-properties-common
 RUN     apt-get -y -q install postgresql-9.3 postgresql-client-9.3 postgresql-contrib-9.3
 
-RUN     DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential python python-virtualenv python-pip libevent-2.0-5 libevent-dev fontforge python-fontforge fonttools redis-server curl git mercurial nodejs libxslt1-dev libxml2-dev automake autoconf libtool libharfbuzz-dev libharfbuzz-dev qt5-default libffi-dev supervisor openssh-server unzip npm python-dev libsqlite3-dev redis-server
+RUN     DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential python python-virtualenv python-pip libevent-2.0-5 libevent-dev fontforge python-fontforge fonttools redis-server curl git mercurial libxslt1-dev libxml2-dev automake autoconf libtool libharfbuzz-dev libharfbuzz-dev qt5-default libffi-dev supervisor openssh-server unzip python-dev libsqlite3-dev redis-server
 
 RUN     mkdir /var/www/
+RUN     mkdir /var/run/sshd
+RUN     echo 'root:screencast' |chpasswd
 
 ADD     supervisord.conf     /etc/supervisor/conf.d/
 
@@ -31,6 +33,10 @@ ADD     https://github.com/googlefonts/fontbakery/archive/master.zip /master.zip
 RUN     unzip master.zip
 RUN     mkdir -p /var/www/
 RUN     mv fontbakery-master /var/www/fontbakery
+
+ADD     http://nodejs.org/dist/v0.10.26/node-v0.10.26.tar.gz /node-v0.10.26.tar.gz
+RUN     tar zxf /node-v0.10.26.tar.gz
+RUN     cd /node-v0.10.26/ && configure && make && make install
 
 # Write configuration for Flask to local. This is initial file and
 # MUST be changed to your needs manually
@@ -74,6 +80,9 @@ EXPOSE  5432
 
 # Expose web server
 EXPOSE  5000
+
+# Expose SSH server
+EXPOSE  22
 
 # Add VOLUMEs to allow backup of config, logs and databases
 VOLUME  ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql"]
