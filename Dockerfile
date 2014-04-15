@@ -49,9 +49,6 @@ RUN     unzip master.zip
 RUN     mkdir -p /var/www/
 RUN     mv -R fontbakery-master /var/www/fontbakery
 
-RUN     echo "export PIP_DOWNLOAD_CACHE=/tmp/.pip_download_cache" >> /tmp/.profile
-RUN     mkdir /tmp/.pip_download_cache
-
 # Write configuration for Flask to local. This is initial file and
 # MUST be changed to your needs manually
 RUN     echo "import os" > /var/www/fontbakert/local.cfg
