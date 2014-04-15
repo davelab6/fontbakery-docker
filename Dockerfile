@@ -6,7 +6,7 @@ RUN     echo "deb http://mirror.bytemark.co.uk/ubuntu/ precise main universe" >>
 
 # Add the PostgreSQL PGP key to verify their Debian packages.
 # It should be the same key as https://www.postgresql.org/media/keys/ACCC4CF8.asc
-RUN     apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8
+RUN     wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
 
 # Add PostgreSQL's repository. It contains the most recent stable release
 #     of PostgreSQL, ``9.3``.
@@ -62,7 +62,6 @@ RUN     cd /var/www/fontbakery && VENVRUN=virtualenv make setup
 RUN     cd /var/www/fontbakery && VENVRUN=virtualenv make init
 RUN     npm install -g bower
 RUN     cd /var/www/fontbakery/static; bower install --allow-root
-
 
 USER    postgres
 
