@@ -21,7 +21,7 @@ RUN     apt-get update
 RUN     apt-get -y -q install python-software-properties software-properties-common
 RUN     apt-get -y -q install postgresql-9.3 postgresql-client-9.3 postgresql-contrib-9.3
 
-RUN     DEBIAN_FRONTEND=noninteractive  apt-get install -y build-essential python python-virtualenv python-pip libevent-2.0-5 libevent-dev fontforge python-fontforge fonttools redis-server curl git mercurial nodejs libxslt1-dev libxml2-dev automake autoconf libtool libharfbuzz-dev libharfbuzz-dev qt5-default libffi-dev supervisor openssh-server unzip npm
+RUN     DEBIAN_FRONTEND=noninteractive  apt-get install -y build-essential python python-virtualenv python-pip libevent-2.0-5 libevent-dev fontforge python-fontforge fonttools redis-server curl git mercurial nodejs libxslt1-dev libxml2-dev automake autoconf libtool libharfbuzz-dev libharfbuzz-dev qt5-default libffi-dev supervisor openssh-server unzip npm python-dev
 
 RUN     mkdir /var/www/
 
