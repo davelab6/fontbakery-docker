@@ -41,13 +41,13 @@ RUN     unzip master.zip
 RUN     mkdir -p /var/www/
 RUN     mv fontbakery-master /var/www/fontbakery
 
-ADD     http://nodejs.org/dist/v0.10.26/node-v0.10.26.tar.gz /node-v0.10.26.tar.gz
-RUN     tar zxf /node-v0.10.26.tar.gz
-RUN     cd /node-v0.10.26/ && ./configure && make && make install
-
 ADD     https://github.com/fontforge/fontforge/archive/2.0.20140101.tar.gz /fontforge-src.tar.gz
 RUN     tar zxf /fontforge-src.tar.gz
 RUN     cd fontforge-2.0.20140101 && ./autogen.sh && ./configure && make && make install
+
+ADD     http://nodejs.org/dist/v0.10.26/node-v0.10.26.tar.gz /node-v0.10.26.tar.gz
+RUN     tar zxf /node-v0.10.26.tar.gz
+RUN     cd /node-v0.10.26/ && ./configure && make && make install
 
 # Write configuration for Flask to local. This is initial file and
 # MUST be changed to your needs manually
