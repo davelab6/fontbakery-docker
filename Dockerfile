@@ -48,9 +48,9 @@ RUN     mkdir -p /var/www/
 RUN     mv fontbakery-master /var/www/fontbakery
 
 
-# ADD     http://nodejs.org/dist/v0.10.26/node-v0.10.26.tar.gz /node-v0.10.26.tar.gz
-# RUN     tar zxf /node-v0.10.26.tar.gz
-# RUN     cd /node-v0.10.26/ && ./configure && make && make install
+ADD     http://nodejs.org/dist/v0.10.26/node-v0.10.26.tar.gz /node-v0.10.26.tar.gz
+RUN     tar zxf /node-v0.10.26.tar.gz
+RUN     cd /node-v0.10.26/ && ./configure && make && make install
 
 ADD     local.cfg  /var/www/fontbakery/bakery/local.cfg
 
@@ -68,10 +68,10 @@ RUN     echo LANG="en_US.UTF-8" > /etc/default/locale
 
 # Install `six` packer over another packages
 RUN     pip install six==1.6.1
-# RUN     cd /var/www/fontbakery && VENVRUN=virtualenv make setup
-# RUN     cd /var/www/fontbakery && VENVRUN=virtualenv make init
-# RUN     npm install -g bower
-# RUN     cd /var/www/fontbakery/static; bower install --allow-root
+RUN     cd /var/www/fontbakery && VENVRUN=virtualenv make setup
+RUN     cd /var/www/fontbakery && VENVRUN=virtualenv make init
+RUN     npm install -g bower
+RUN     cd /var/www/fontbakery/static; bower install --allow-root
 
 # Create a PostgreSQL role named ``docker`` with ``docker`` as the password and
 # then create a database `docker` owned by the ``docker`` role.
