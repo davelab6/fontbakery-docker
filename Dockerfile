@@ -55,7 +55,7 @@ RUN     cd /node-v0.10.26/ && ./configure && make && make install
 # Write configuration for Flask to local. This is initial file and
 # MUST be changed to your needs manually
 RUN     echo "import os\n" > /var/www/fontbakery/local.cfg
-RUN     echo "ROOT = '/var/www/'\n" >> /var/www/fontbakery/local.cfg
+RUN     echo "ROOT = '/var/www/fontbakery/'\n" >> /var/www/fontbakery/local.cfg
 RUN     echo "SQLALCHEMY_DATABASE_URI = 'postgresql://docker:docker@localhost/docker'\n" >> /var/www/fontbakery/local.cfg
 RUN     echo "DATA_ROOT = os.path.realpath(os.path.join(ROOT, "..", "data"))\n" >> /var/www/fontbakery/local.cfg
 RUN     echo "SECRET_KEY = '\x18K/\x0be\x8b9\xac\xf9\xac\x11\x88\x858\xa4~8\x03\x05\xdf\x03Y\r|'\n" >> /var/www/fontbakery/local.cfg
