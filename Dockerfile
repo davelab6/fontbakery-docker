@@ -65,6 +65,9 @@ RUN     echo "GITHUB_CONSUMER_SECRET = 'ec494ff274b5a5c7b0cb7563870e4a32874d93a6
 RUN     echo "SQLALCHEMY_ECHO = True\n" >> /var/www/fontbakery/bakery/local.cfg
 RUN     echo LANG="en_US.UTF-8" > /etc/default/locale
 
+# Setup library path so that fontforge python library can find ``fontforge.so`` library
+ENV     LD_LIBRARY_PATH /usr/local/lib/:/usr/lib
+
 # Install `six` packer over another packages
 RUN     pip install six==1.6.1
 RUN     cd /var/www/fontbakery && VENVRUN=virtualenv make setup
@@ -72,7 +75,6 @@ RUN     cd /var/www/fontbakery && VENVRUN=virtualenv make init
 RUN     npm install -g bower
 RUN     cd /var/www/fontbakery/static; bower install --allow-root
 
-ENV     LD_LIBRARY_PATH /usr/local/lib/:/usr/lib
 
 USER postgres
 
