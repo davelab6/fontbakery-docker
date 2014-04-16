@@ -20,7 +20,12 @@ RUN     apt-get update
 #  them by prefixing each apt-get statement with DEBIAN_FRONTEND=noninteractive
 RUN     apt-get -y -q install python-software-properties software-properties-common
 RUN     apt-get -y -q install postgresql-9.3 postgresql-client-9.3 postgresql-contrib-9.3
+
+# Install fontforge
 RUN     apt-get -y -q install pkg-config libgtk2.0-dev libperl-dev
+ADD     https://github.com/fontforge/fontforge/archive/2.0.20140101.tar.gz /fontforge-src.tar.gz
+RUN     tar zxf /fontforge-src.tar.gz
+RUN     cd fontforge-2.0.20140101 && ./autogen.sh && ./configure && make && make install
 
 # Install all requirements for ``fontbakery``
 RUN     DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential python python-virtualenv python-pip libevent-2.0-5 libevent-dev fonttools redis-server curl git mercurial libxslt1-dev libxml2-dev automake autoconf libtool libharfbuzz-dev libharfbuzz-dev qt5-default libffi-dev supervisor openssh-server unzip python-dev libsqlite3-dev redis-server libssl-dev
@@ -41,9 +46,6 @@ RUN     unzip master.zip
 RUN     mkdir -p /var/www/
 RUN     mv fontbakery-master /var/www/fontbakery
 
-ADD     https://github.com/fontforge/fontforge/archive/2.0.20140101.tar.gz /fontforge-src.tar.gz
-RUN     tar zxf /fontforge-src.tar.gz
-RUN     cd fontforge-2.0.20140101 && ./autogen.sh && ./configure && make && make install
 
 ADD     http://nodejs.org/dist/v0.10.26/node-v0.10.26.tar.gz /node-v0.10.26.tar.gz
 RUN     tar zxf /node-v0.10.26.tar.gz
