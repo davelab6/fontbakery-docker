@@ -63,8 +63,6 @@ RUN     cd /var/www/fontbakery && VENVRUN=virtualenv make init
 RUN     npm install -g bower
 RUN     cd /var/www/fontbakery/static; bower install --allow-root
 
-CMD     ["supervisord"]
-
 USER    postgres
 
 # Create a PostgreSQL role named ``docker`` with ``docker`` as the password and
