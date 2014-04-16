@@ -68,10 +68,10 @@ RUN     echo LANG="en_US.UTF-8" > /etc/default/locale
 
 # Install `six` packer over another packages
 RUN     pip install six==1.6.1
-RUN     cd /var/www/fontbakery && VENVRUN=virtualenv make setup
-RUN     cd /var/www/fontbakery && VENVRUN=virtualenv make init
-RUN     npm install -g bower
-RUN     cd /var/www/fontbakery/static; bower install --allow-root
+# RUN     cd /var/www/fontbakery && VENVRUN=virtualenv make setup
+# RUN     cd /var/www/fontbakery && VENVRUN=virtualenv make init
+# RUN     npm install -g bower
+# RUN     cd /var/www/fontbakery/static; bower install --allow-root
 
 # Create a PostgreSQL role named ``docker`` with ``docker`` as the password and
 # then create a database `docker` owned by the ``docker`` role.
