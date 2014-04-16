@@ -73,6 +73,8 @@ RUN     cd /var/www/fontbakery && VENVRUN=virtualenv make init
 RUN     npm install -g bower
 RUN     cd /var/www/fontbakery/static; bower install --allow-root
 
+USER postgres
+
 # Create a PostgreSQL role named ``docker`` with ``docker`` as the password and
 # then create a database `docker` owned by the ``docker`` role.
 # Note: here we use ``&&\`` to run commands one after the other - the ``\``
