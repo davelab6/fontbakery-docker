@@ -40,6 +40,8 @@ RUN     mkdir /var/run/sshd
 # After install please change root password to your own
 RUN     echo 'root:screencast' |chpasswd
 
+RUN     mkdir /var/run/sshd
+
 ADD     supervisord.conf     /etc/supervisor/conf.d/
 
 ADD     https://github.com/googlefonts/fontbakery/archive/master.zip /master.zip
