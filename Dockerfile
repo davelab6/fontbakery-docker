@@ -107,6 +107,9 @@ EXPOSE  5000
 # Expose SSH server
 EXPOSE  22
 
+RUN    cat /etc/pam.d/sshd > /sshd.pam.bak
+RUN    sed 's/required     pam_loginuid.so/optional     pam_loginuid.so/g' /sshd.pam.bak > /etc/pam.d/sshd
+
 # Add VOLUMEs to allow backup of config, logs and databases
 VOLUME  ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql"]
 
