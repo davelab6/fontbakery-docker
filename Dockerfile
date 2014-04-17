@@ -94,7 +94,7 @@ USER root
 # Install `six` packer over another packages
 RUN     pip install six==1.6.1 psycopg2
 RUN     cd /var/www/fontbakery && VENVRUN=virtualenv make setup
-RUN     /usr/lib/postgresql/9.3/bin/postgres -D /var/lib/postgresql/9.3/main -c config_file=/etc/postgresql/9.3/main/postgresql.conf & ; cd /var/www/fontbakery && VENVRUN=virtualenv make init
+RUN     /etc/init.d/postgresql start && cd /var/www/fontbakery && VENVRUN=virtualenv make init
 RUN     npm install -g bower
 RUN     cd /var/www/fontbakery/static; bower install --allow-root
 
