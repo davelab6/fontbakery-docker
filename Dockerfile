@@ -59,7 +59,7 @@ RUN     echo "import os" > /var/www/fontbakery/bakery/local.cfg
 RUN     echo "ROOT = '/var/www/fontbakery/'" >> /var/www/fontbakery/bakery/local.cfg
 RUN     echo "SQLALCHEMY_DATABASE_URI = 'postgresql://docker:docker@localhost/docker'" >> /var/www/fontbakery/bakery/local.cfg
 RUN     echo "DATA_ROOT = os.path.realpath(os.path.join(ROOT, \"..\", \"data\"))" >> /var/www/fontbakery/bakery/local.cfg
-RUN     echo "SECRET_KEY = '\\x18K/\\x0be\\x8b9\\xac\\xf9\\xac\\x11\\x88\\x858\\xa4~8\\x03\\x05\\xdf\\x03Y\\\r|'" >> /var/www/fontbakery/bakery/local.cfg
+RUN     echo "SECRET_KEY = `python -c 'import os; print "%r" % os.urandom(24)'`" >> /var/www/fontbakery/bakery/local.cfg
 RUN     echo "GITHUB_CONSUMER_KEY = '4a1a8295dacab483f1b5'" >> /var/www/fontbakery/bakery/local.cfg
 RUN     echo "GITHUB_CONSUMER_SECRET = 'ec494ff274b5a5c7b0cb7563870e4a32874d93a6'" >> /var/www/fontbakery/bakery/local.cfg
 RUN     echo "SQLALCHEMY_ECHO = True" >> /var/www/fontbakery/bakery/local.cfg
