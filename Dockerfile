@@ -19,7 +19,7 @@ RUN     apt-get update
 #  There are some warnings (in red) that show up during the build. You can hide
 #  them by prefixing each apt-get statement with DEBIAN_FRONTEND=noninteractive
 RUN     apt-get -y -q install python-software-properties software-properties-common
-RUN     apt-get -y -q install postgresql-9.3 postgresql-client-9.3 postgresql-contrib-9.3
+RUN     apt-get -y -q install postgresql-9.3 postgresql-client-9.3 postgresql-contrib-9.3 libpq-dev
 
 # Install fontforge
 RUN     apt-get -y -q install pkg-config libgtk2.0-dev libperl-dev
@@ -69,13 +69,13 @@ RUN     echo LANG="en_US.UTF-8" > /etc/default/locale
 ENV     LD_LIBRARY_PATH /usr/local/lib/:/usr/lib
 
 # Install `six` packer over another packages
-RUN     pip install six==1.6.1
+RUN     pip install six==1.6.1 psycopg2
 RUN     cd /var/www/fontbakery && VENVRUN=virtualenv make setup
 RUN     cd /var/www/fontbakery && VENVRUN=virtualenv make init
 RUN     npm install -g bower
 RUN     cd /var/www/fontbakery/static; bower install --allow-root
 
-
+# Next 3 commands RUN must be executed as ``postgres`` user
 USER postgres
 
 # Create a PostgreSQL role named ``docker`` with ``docker`` as the password and
