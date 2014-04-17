@@ -68,12 +68,6 @@ RUN     echo LANG="en_US.UTF-8" > /etc/default/locale
 # Setup library path so that fontforge python library can find ``fontforge.so`` library
 ENV     LD_LIBRARY_PATH /usr/local/lib/:/usr/lib
 
-# Install `six` packer over another packages
-RUN     pip install six==1.6.1 psycopg2
-RUN     cd /var/www/fontbakery && VENVRUN=virtualenv make setup
-RUN     cd /var/www/fontbakery && VENVRUN=virtualenv make init
-RUN     npm install -g bower
-RUN     cd /var/www/fontbakery/static; bower install --allow-root
 
 # Next 3 commands RUN must be executed as ``postgres`` user
 USER postgres
@@ -93,8 +87,18 @@ RUN     echo "host all  all    0.0.0.0/0  md5" >> /etc/postgresql/9.3/main/pg_hb
 # And add ``listen_addresses`` to ``/etc/postgresql/9.3/main/postgresql.conf``
 RUN     echo "listen_addresses='*'" >> /etc/postgresql/9.3/main/postgresql.conf
 
+RUN     /usr/lib/postgresql/9.3/bin/postgres -D /var/lib/postgresql/9.3/main -c config_file=/etc/postgresql/9.3/main/postgresql.conf
+
+
 # return USER to previous state
 USER root
+
+# Install `six` packer over another packages
+RUN     pip install six==1.6.1 psycopg2
+RUN     cd /var/www/fontbakery && VENVRUN=virtualenv make setup
+RUN     cd /var/www/fontbakery && VENVRUN=virtualenv make init
+RUN     npm install -g bower
+RUN     cd /var/www/fontbakery/static; bower install --allow-root
 
 # Expose the PostgreSQL port
 EXPOSE  5432
