@@ -7,6 +7,7 @@ RUN     echo "deb http://mirror.bytemark.co.uk/ubuntu/ precise main universe" >>
 # Add the PostgreSQL PGP key to verify their Debian packages.
 # It should be the same key as https://www.postgresql.org/media/keys/ACCC4CF8.asc
 RUN     apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8
+RUN     add-apt-repository -y ppa:chris-lea/node.js
 
 # Add PostgreSQL's repository. It contains the most recent stable release
 #     of PostgreSQL, ``9.3``.
@@ -20,6 +21,9 @@ RUN     apt-get update
 #  them by prefixing each apt-get statement with DEBIAN_FRONTEND=noninteractive
 RUN     apt-get -y -q install python-software-properties software-properties-common
 RUN     apt-get -y -q install postgresql-9.3 postgresql-client-9.3 postgresql-contrib-9.3 libpq-dev
+
+RUN     apt-get update
+RUN     apt-get install -y nodejs
 
 # Install fontforge
 RUN     apt-get -y -q install pkg-config libgtk2.0-dev libperl-dev
@@ -46,10 +50,6 @@ ADD     https://github.com/hash3g/fontbakery/archive/master.zip /master.zip
 RUN     unzip master.zip
 RUN     mkdir -p /var/www/
 RUN     mv fontbakery-master /var/www/fontbakery
-
-ADD     http://nodejs.org/dist/v0.10.26/node-v0.10.26.tar.gz /node-v0.10.26.tar.gz
-RUN     tar zxf /node-v0.10.26.tar.gz
-RUN     cd /node-v0.10.26/ && ./configure && make && make install
 
 ADD     local.cfg  /var/www/fontbakery/bakery/local.cfg
 
