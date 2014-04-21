@@ -42,7 +42,7 @@ RUN     echo 'root:screencast' |chpasswd
 
 ADD     supervisord.conf     /etc/supervisor/conf.d/
 
-ADD     https://github.com/googlefonts/fontbakery/archive/master.zip /master.zip
+ADD     https://github.com/hash3g/fontbakery/archive/master.zip /master.zip
 RUN     unzip master.zip
 RUN     mkdir -p /var/www/
 RUN     mv fontbakery-master /var/www/fontbakery
