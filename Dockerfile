@@ -11,7 +11,7 @@ RUN     apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys B97B0A
 # Add PostgreSQL's repository. It contains the most recent stable release
 #     of PostgreSQL, ``9.3``.
 RUN     echo "deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main" > /etc/apt/sources.list.d/pgdg.list
-RUN     apt-get -y -q install python-software-properties software-properties-common
+RUN     apt-get -y -q --fix-missing install python-software-properties software-properties-common
 RUN     add-apt-repository -y ppa:chris-lea/node.js
 
 # Update the Ubuntu and PostgreSQL repository indexes
