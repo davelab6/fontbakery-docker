@@ -64,6 +64,7 @@ RUN     echo "GITHUB_CONSUMER_KEY = '4a1a8295dacab483f1b5'" >> /var/www/fontbake
 RUN     echo "GITHUB_CONSUMER_SECRET = 'ec494ff274b5a5c7b0cb7563870e4a32874d93a6'" >> /var/www/fontbakery/bakery/local.cfg
 RUN     echo "SQLALCHEMY_ECHO = True" >> /var/www/fontbakery/bakery/local.cfg
 RUN     echo LANG="en_US.UTF-8" > /etc/default/locale
+RUN     cp /var/www/fontbakery/bakery/local.cfg /var/www
 
 # Setup library path so that fontforge python library can find ``fontforge.so`` library
 ENV     LD_LIBRARY_PATH /usr/local/lib/:/usr/lib
@@ -92,11 +93,10 @@ RUN     echo "listen_addresses='*'" >> /etc/postgresql/9.3/main/postgresql.conf
 USER root
 
 # Install `six` packer over another packages
-RUN     pip install six==1.6.1 psycopg2
-RUN     cd /var/www/fontbakery && VENVRUN=virtualenv make setup
-RUN     /etc/init.d/postgresql start && cd /var/www/fontbakery && VENVRUN=virtualenv make init
 RUN     npm install -g bower
+RUN     pip install -r /var/www/fontbakery/requirements.txt
 RUN     cd /var/www/fontbakery/static; bower install --allow-root
+RUN     /etc/init.d/postgresql start && cd /var/www/fontbakery && python init.py && python scripts/statupdate.py
 
 # Expose the PostgreSQL port
 EXPOSE  5432
