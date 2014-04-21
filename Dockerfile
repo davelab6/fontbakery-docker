@@ -20,9 +20,10 @@ RUN     apt-get update
 # Install ``python-software-properties``, ``software-properties-common`` and PostgreSQL 9.3
 #  There are some warnings (in red) that show up during the build. You can hide
 #  them by prefixing each apt-get statement with DEBIAN_FRONTEND=noninteractive
+RUN     apt-get upgrade -y
+
 RUN     apt-get -y -q install postgresql-9.3 postgresql-client-9.3 postgresql-contrib-9.3 libpq-dev
 
-RUN     apt-get update
 RUN     apt-get install -y nodejs
 
 # Install fontforge
@@ -91,6 +92,11 @@ RUN     echo "listen_addresses='*'" >> /etc/postgresql/9.3/main/postgresql.conf
 
 # return USER to previous state
 USER root
+
+RUN apt-get autoremove -y
+
+# Clear package repository cache
+RUN apt-get clean all
 
 # Install `six` packer over another packages
 RUN     npm install -g bower
