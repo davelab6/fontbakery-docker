@@ -2,7 +2,7 @@ FROM        ubuntu:13.10
 
 MAINTAINER  Vitaly Volkov <hash.3g@gmail.com> (@hash3g)
 
-RUN     echo "deb http://mirror.bytemark.co.uk/ubuntu/ precise main universe" >> /etc/apt/sources.list
+RUN     echo "deb http://mirror.bytemark.co.uk/ubuntu/ precise main universe multiverse" >> /etc/apt/sources.list
 
 # Add the PostgreSQL PGP key to verify their Debian packages.
 # It should be the same key as https://www.postgresql.org/media/keys/ACCC4CF8.asc
@@ -11,6 +11,9 @@ RUN     apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys B97B0A
 # Add PostgreSQL's repository. It contains the most recent stable release
 #     of PostgreSQL, ``9.3``.
 RUN     echo "deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main" > /etc/apt/sources.list.d/pgdg.list
+RUN     apt-get update
+RUN     apt-get upgrade -y
+
 RUN     apt-get -y -q --fix-missing install python-software-properties software-properties-common
 RUN     add-apt-repository -y ppa:chris-lea/node.js
 
@@ -20,7 +23,6 @@ RUN     apt-get update
 # Install ``python-software-properties``, ``software-properties-common`` and PostgreSQL 9.3
 #  There are some warnings (in red) that show up during the build. You can hide
 #  them by prefixing each apt-get statement with DEBIAN_FRONTEND=noninteractive
-RUN     apt-get upgrade -y
 
 RUN     apt-get -y -q install postgresql-9.3 postgresql-client-9.3 postgresql-contrib-9.3 libpq-dev
 
