@@ -105,7 +105,7 @@ RUN     npm install -g bower
 RUN     pip install six==1.6.1 psycopg2
 RUN     pip install -r /var/www/fontbakery/requirements.txt
 RUN     cd /var/www/fontbakery/static; bower install --allow-root
-# RUN     /etc/init.d/postgresql start && cd /var/www/fontbakery && python init.py && python scripts/statupdate.py
+RUN     /etc/init.d/postgresql start && cd /var/www/fontbakery && python init.py && python scripts/statupdate.py
 
 # Expose the PostgreSQL port
 EXPOSE  5432
@@ -122,4 +122,4 @@ RUN    sed 's/required     pam_loginuid.so/optional     pam_loginuid.so/g' /sshd
 # Add VOLUMEs to allow backup of config, logs and databases
 VOLUME  ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql"]
 
-# CMD     ["supervisord"]
+CMD     ["supervisord"]
