@@ -68,8 +68,6 @@ RUN     echo "SQLALCHEMY_ECHO = True" >> /var/www/fontbakery/bakery/local.cfg
 RUN     echo LANG="en_US.UTF-8" > /etc/default/locale
 RUN     cp /var/www/fontbakery/bakery/local.cfg /var/www
 
-# Setup library path so that fontforge python library can find ``fontforge.so`` library
-ENV     LD_LIBRARY_PATH /usr/local/lib/:/usr/lib
 
 
 # Next 3 commands RUN must be executed as ``postgres`` user
@@ -114,6 +112,9 @@ EXPOSE  5000
 
 # Expose SSH server
 EXPOSE  22
+
+# Setup library path so that fontforge python library can find ``fontforge.so`` library
+ENV     LD_LIBRARY_PATH /usr/local/lib/:/usr/lib
 
 RUN    cat /etc/pam.d/sshd > /sshd.pam.bak
 RUN    sed 's/required     pam_loginuid.so/optional     pam_loginuid.so/g' /sshd.pam.bak > /etc/pam.d/sshd
