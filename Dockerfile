@@ -40,6 +40,8 @@ RUN     cd fontforge-2.0.20140101 && ./autogen.sh && ./configure --prefix=/usr &
 
 # Good way is to place project installed inside ``www`` directory
 RUN     mkdir /var/www/
+RUN     git clone https://github.com/khaledhosny/ots.git
+RUN     cd ots && python gyp_ots && make
 
 # To make container accessable with ssh create sshd directory
 RUN     mkdir /var/run/sshd
@@ -65,6 +67,7 @@ RUN     echo "DATA_ROOT = os.path.realpath(os.path.join(ROOT, \"..\", \"data\"))
 RUN     echo "GITHUB_CONSUMER_KEY = '4a1a8295dacab483f1b5'" >> /var/www/fontbakery/bakery/local.cfg
 RUN     echo "GITHUB_CONSUMER_SECRET = 'ec494ff274b5a5c7b0cb7563870e4a32874d93a6'" >> /var/www/fontbakery/bakery/local.cfg
 RUN     echo "SQLALCHEMY_ECHO = True" >> /var/www/fontbakery/bakery/local.cfg
+RUN     echo "OTS_BINARY_PATH = '/var/www/ots/out/Default/ot-sanitise'" >> /var/www/fontbakery/bakery/local.cfg
 RUN     echo LANG="en_US.UTF-8" > /etc/default/locale
 RUN     cp /var/www/fontbakery/bakery/local.cfg /var/www
 
