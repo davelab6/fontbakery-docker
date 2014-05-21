@@ -102,6 +102,7 @@ RUN apt-get clean all
 # Install `six` packer over another packages
 RUN     npm install -g bower
 RUN     pip install six==1.6.1 psycopg2
+RUN     pip install supervisor-stdout
 RUN     pip install -r /var/www/fontbakery/requirements.txt
 RUN     cd /var/www/fontbakery/static; bower install --allow-root
 RUN     /etc/init.d/postgresql start && cd /var/www/fontbakery && python init.py && python scripts/statupdate.py
