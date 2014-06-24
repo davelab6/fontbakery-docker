@@ -1,30 +1,16 @@
-FROM        ubuntu:13.10
+FROM        ubuntu:14.04
 
 MAINTAINER  Vitaly Volkov <hash.3g@gmail.com> (@hash3g)
 
 RUN     echo "deb http://mirror.bytemark.co.uk/ubuntu/ precise main universe multiverse" >> /etc/apt/sources.list
 
-# Add the PostgreSQL PGP key to verify their Debian packages.
-# It should be the same key as https://www.postgresql.org/media/keys/ACCC4CF8.asc
-RUN     apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8
-
-# Add PostgreSQL's repository. It contains the most recent stable release
-#     of PostgreSQL, ``9.3``.
-RUN     echo "deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main" > /etc/apt/sources.list.d/pgdg.list
-RUN     apt-get update
-RUN     apt-get upgrade -y
-
 RUN     apt-get -y -q --fix-missing install python-software-properties software-properties-common
 RUN     add-apt-repository -y ppa:chris-lea/node.js
-
-# Update the Ubuntu and PostgreSQL repository indexes
 RUN     apt-get update
 
 # Install ``python-software-properties``, ``software-properties-common`` and PostgreSQL 9.3
 #  There are some warnings (in red) that show up during the build. You can hide
 #  them by prefixing each apt-get statement with DEBIAN_FRONTEND=noninteractive
-
-RUN     apt-get -y -q install postgresql-9.3 postgresql-client-9.3 postgresql-contrib-9.3 libpq-dev
 
 RUN     apt-get install -y nodejs
 
@@ -37,6 +23,10 @@ RUN     DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential python
 ADD     https://github.com/fontforge/fontforge/archive/2.0.20140101.tar.gz /fontforge-src.tar.gz
 RUN     tar zxf /fontforge-src.tar.gz
 RUN     cd fontforge-2.0.20140101 && ./autogen.sh && ./configure --prefix=/usr && make && make install
+
+ADD     http://downloads.sourceforge.net/project/freetype/ttfautohint/1.1/ttfautohint-1.1.tar.gz /ttfautohint-1.1.tar.gz
+RUN     tar zxf /ttfautohint-1.1.tar.gz
+RUN     cd ttfautohint-1.1 && ./configure && make && make install
 
 # Good way is to place project installed inside ``www`` directory
 RUN     mkdir /var/www/
@@ -62,7 +52,7 @@ ADD     local.cfg  /var/www/fontbakery/bakery/local.cfg
 # MUST be changed to your needs manually
 RUN     echo "import os" > /var/www/fontbakery/bakery/local.cfg
 RUN     echo "ROOT = '/var/www/fontbakery/'" >> /var/www/fontbakery/bakery/local.cfg
-RUN     echo "SQLALCHEMY_DATABASE_URI = 'postgresql://docker:docker@localhost/docker'" >> /var/www/fontbakery/bakery/local.cfg
+RUN     echo "SQLALCHEMY_DATABASE_URI = 'sqlite:////%s/../../data.sqlite' % os.path.dirname(os.path.abspath(__file__))" >> /var/www/fontbakery/bakery/local.cfg
 RUN     echo "DATA_ROOT = os.path.realpath(os.path.join(ROOT, \"..\", \"data\"))" >> /var/www/fontbakery/bakery/local.cfg
 RUN     echo "GITHUB_CONSUMER_KEY = '4a1a8295dacab483f1b5'" >> /var/www/fontbakery/bakery/local.cfg
 RUN     echo "GITHUB_CONSUMER_SECRET = 'ec494ff274b5a5c7b0cb7563870e4a32874d93a6'" >> /var/www/fontbakery/bakery/local.cfg
@@ -70,25 +60,6 @@ RUN     echo "SQLALCHEMY_ECHO = True" >> /var/www/fontbakery/bakery/local.cfg
 RUN     echo "OTS_BINARY_PATH = '/var/www/ots/out/Default/ot-sanitise'" >> /var/www/fontbakery/bakery/local.cfg
 RUN     echo LANG="en_US.UTF-8" > /etc/default/locale
 RUN     cp /var/www/fontbakery/bakery/local.cfg /var/www
-
-
-# Next 3 commands RUN must be executed as ``postgres`` user
-USER postgres
-
-# Create a PostgreSQL role named ``docker`` with ``docker`` as the password and
-# then create a database `docker` owned by the ``docker`` role.
-# Note: here we use ``&&\`` to run commands one after the other - the ``\``
-#       allows the RUN command to span multiple lines.
-RUN    /etc/init.d/postgresql start &&\
-    psql --command "CREATE USER docker WITH SUPERUSER PASSWORD 'docker';" &&\
-    createdb -O docker docker
-
-# Adjust PostgreSQL configuration so that remote connections to the
-# database are possible.
-RUN     echo "host all  all    0.0.0.0/0  md5" >> /etc/postgresql/9.3/main/pg_hba.conf
-
-# And add ``listen_addresses`` to ``/etc/postgresql/9.3/main/postgresql.conf``
-RUN     echo "listen_addresses='*'" >> /etc/postgresql/9.3/main/postgresql.conf
 
 
 # return USER to previous state
@@ -105,10 +76,7 @@ RUN     pip install six==1.6.1 psycopg2
 RUN     pip install supervisor-stdout
 RUN     pip install -r /var/www/fontbakery/requirements.txt
 RUN     cd /var/www/fontbakery/static; bower install --allow-root
-RUN     /etc/init.d/postgresql start && cd /var/www/fontbakery && python init.py && python scripts/statupdate.py
-
-# Expose the PostgreSQL port
-EXPOSE  5432
+RUN     cd /var/www/fontbakery && python init.py && python scripts/statupdate.py
 
 # Expose web server
 EXPOSE  5000
@@ -120,8 +88,5 @@ EXPOSE  587
 
 RUN    cat /etc/pam.d/sshd > /sshd.pam.bak
 RUN    sed 's/required     pam_loginuid.so/optional     pam_loginuid.so/g' /sshd.pam.bak > /etc/pam.d/sshd
-
-# Add VOLUMEs to allow backup of config, logs and databases
-VOLUME  ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql"]
 
 CMD     ["supervisord"]
