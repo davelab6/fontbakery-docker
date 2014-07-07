@@ -15,11 +15,11 @@ RUN     apt-get install -y nodejs
 RUN     apt-get -y -q install pkg-config libgtk2.0-dev libperl-dev
 
 # Install all requirements for ``fontbakery``
-RUN     DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential python python-virtualenv python-pip libevent-2.0-5 libevent-dev fonttools redis-server curl git mercurial libxslt1-dev libxml2-dev automake autoconf libtool libharfbuzz-dev qt4-default libffi-dev supervisor openssh-server unzip python-dev libsqlite3-dev redis-server libssl-dev subversion
+RUN     DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential python python-virtualenv python-pip libevent-2.0-5 libevent-dev fonttools redis-server curl git mercurial libxslt1-dev libxml2-dev automake autoconf libtool libharfbuzz-dev qt5-default libffi-dev supervisor openssh-server unzip python-dev libsqlite3-dev redis-server libssl-dev subversion
 
-sudo add-apt-repository --yes ppa:hash-3g/fontforge
-sudo apt-get update -qq
-sudo apt-get -y -q install fontforge
+ADD     https://github.com/fontforge/fontforge/archive/2.0.20140101.tar.gz /fontforge-src.tar.gz
+RUN     tar zxf /fontforge-src.tar.gz
+RUN     cd fontforge-2.0.20140101 && ./autogen.sh && ./configure --prefix=/usr && make && make install
 
 # ADD     http://downloads.sourceforge.net/project/freetype/ttfautohint/1.1/ttfautohint-1.1.tar.gz /ttfautohint-1.1.tar.gz
 # RUN     tar zxf /ttfautohint-1.1.tar.gz
