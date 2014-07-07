@@ -4,15 +4,12 @@ MAINTAINER  Vitaly Volkov <hash.3g@gmail.com> (@hash3g)
 
 RUN     echo "deb http://mirror.bytemark.co.uk/ubuntu/ precise main universe multiverse" >> /etc/apt/sources.list
 
+RUN     apt-get update
 RUN     apt-get -y -q --fix-missing install python-software-properties software-properties-common
 RUN     add-apt-repository -y ppa:chris-lea/node.js
 RUN     apt-get update
-
-# Install ``python-software-properties``, ``software-properties-common`` and PostgreSQL 9.3
-#  There are some warnings (in red) that show up during the build. You can hide
-#  them by prefixing each apt-get statement with DEBIAN_FRONTEND=noninteractive
-
 RUN     apt-get install -y nodejs
+
 
 # Install fontforge
 RUN     apt-get -y -q install pkg-config libgtk2.0-dev libperl-dev
