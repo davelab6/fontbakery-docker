@@ -6,7 +6,7 @@ RUN     echo "deb http://mirror.bytemark.co.uk/ubuntu/ precise main universe mul
 
 RUN     apt-get update
 RUN     apt-get -y -q --fix-missing install python-software-properties software-properties-common
-RUN     apt-get -y -q --fix-missing install alien dpkg-dev debhelper build-essential
+RUN     apt-get -y -q --fix-missing install alien dpkg-dev debhelper build-essential vim
 RUN     add-apt-repository -y ppa:chris-lea/node.js
 RUN     apt-get update
 RUN     apt-get install -y nodejs
@@ -28,8 +28,8 @@ RUN     cd / && dpkg -i ttfautohint*.deb
 
 # Good way is to place project installed inside ``www`` directory
 RUN     mkdir /var/www/
-RUN     git clone https://github.com/khaledhosny/ots.git
-RUN     cd ots && python gyp_ots && make
+RUN     cd /var/www/ && git clone https://github.com/khaledhosny/ots.git
+RUN     cd /var/www/ots && python gyp_ots && make
 
 # To make container accessable with ssh create sshd directory
 RUN     mkdir /var/run/sshd
