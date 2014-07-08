@@ -84,5 +84,6 @@ EXPOSE  22
 EXPOSE  587
 
 RUN    sed -ri 's/^session\s+required\s+pam_loginuid.so$/session optional pam_loginuid.so/' /etc/pam.d/sshd
+RUN    sed -ri 's/without-password/yes/' /etc/ssh/sshd_config
 
 CMD     ["supervisord"]
