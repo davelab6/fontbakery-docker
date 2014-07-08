@@ -6,6 +6,7 @@ RUN     echo "deb http://mirror.bytemark.co.uk/ubuntu/ precise main universe mul
 
 RUN     apt-get update
 RUN     apt-get -y -q --fix-missing install python-software-properties software-properties-common
+RUN     apt-get -y -q --fix-missing install alien dpkg-dev debhelper build-essential
 RUN     add-apt-repository -y ppa:chris-lea/node.js
 RUN     apt-get update
 RUN     apt-get install -y nodejs
@@ -21,9 +22,9 @@ ADD     https://github.com/fontforge/fontforge/archive/2.0.20140101.tar.gz /font
 RUN     tar zxf /fontforge-src.tar.gz
 RUN     cd fontforge-2.0.20140101 && ./autogen.sh && ./configure --prefix=/usr && make && make install
 
-# ADD     http://downloads.sourceforge.net/project/freetype/ttfautohint/1.1/ttfautohint-1.1.tar.gz /ttfautohint-1.1.tar.gz
-# RUN     tar zxf /ttfautohint-1.1.tar.gz
-# RUN     cd ttfautohint-1.1 && ./configure && make && make install
+ADD     http://dl.fedoraproject.org/pub/fedora/linux/updates/20/x86_64/ttfautohint-1.1-1.fc20.x86_64.rpm /ttfautohint-1.1-1.fc20.x86_64.rpm
+RUN     cd / && alien ttfautohint-1.1-1.fc20.x86_64.rpm
+RUN     cd / && dpkg -i ttfautohint*.deb
 
 # Good way is to place project installed inside ``www`` directory
 RUN     mkdir /var/www/
