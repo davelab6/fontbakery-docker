@@ -38,6 +38,8 @@ RUN     mkdir /var/run/sshd
 RUN     echo 'root:screencast' |chpasswd
 
 ADD     supervisord.conf     /etc/supervisor/conf.d/
+ADD     crontab   /crontab
+RUN     crontab < /crontab
 
 ADD     https://github.com/googlefonts/fontbakery/archive/master.zip /master.zip
 RUN     unzip master.zip
