@@ -1,1 +1,2 @@
 0 0 * * * cd /var/www/fontbakery && python scripts/statupdate.py
+*/20 * * * * cd /var/www/fontbakery && python scripts/gitupdate.py
