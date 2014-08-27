@@ -78,7 +78,6 @@ RUN     pip install -r /var/www/fontbakery/requirements.txt
 RUN     pip install git+https://github.com/behdad/fontTools.git
 RUN     pip install git+https://github.com/googlefonts/fontbakery-cli.git
 RUN     cd /var/www/fontbakery/static; bower install --allow-root
-RUN     cd /var/www/fontbakery && python init.py && python scripts/statupdate.py
 
 # Expose web server
 EXPOSE  5000
