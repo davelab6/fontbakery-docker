@@ -1,0 +1,10 @@
+#!/bin/sh
+
+mkdir -p /var/www/data
+
+read -p "Enter drone deployment key:" yn
+
+mkdir -p ~/.ssh
+echo $yn > ~/.ssh/authorized_keys
+
+supervisord
