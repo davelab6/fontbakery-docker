@@ -35,6 +35,9 @@ RUN     mkdir /var/run/sshd
 RUN     echo 'root:screencast' |chpasswd
 
 ADD     supervisord.conf     /etc/supervisor/conf.d/
+ADD     run  /usr/local/bin
+RUN     chmod +x /usr/local/bin/run
+
 ADD     crontab   /crontab
 RUN     crontab < /crontab
 
@@ -89,4 +92,4 @@ RUN    sed -ri 's/^session\s+required\s+pam_loginuid.so$/session optional pam_lo
 RUN    sed -ri 's/without-password/yes/' /etc/ssh/sshd_config
 
 
-CMD     ["run"]
+CMD     ["/usr/local/bin/run"]
