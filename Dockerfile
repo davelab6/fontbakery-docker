@@ -8,8 +8,9 @@ RUN     apt-get update
 RUN     apt-get -y -q --fix-missing install python-software-properties software-properties-common
 RUN     apt-get -y -q --fix-missing install alien dpkg-dev debhelper build-essential vim
 RUN     add-apt-repository -y ppa:chris-lea/node.js
+RUN     add-apt-repository ppa:fontforge/fontforge
 RUN     apt-get update
-RUN     apt-get install -y nodejs
+RUN     apt-get install -y nodejs python-fontforge
 
 
 # Install fontforge
@@ -17,10 +18,6 @@ RUN     apt-get -y -q install pkg-config libgtk2.0-dev libperl-dev
 
 # Install all requirements for ``fontbakery``
 RUN     DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential python python-virtualenv python-pip libevent-2.0-5 libevent-dev fonttools redis-server curl git mercurial libxslt1-dev libxml2-dev automake autoconf libtool libharfbuzz-dev qt5-default libffi-dev supervisor openssh-server unzip python-dev libsqlite3-dev redis-server libssl-dev subversion
-
-ADD     https://github.com/fontforge/fontforge/archive/2.0.20140101.tar.gz /fontforge-src.tar.gz
-RUN     tar zxf /fontforge-src.tar.gz
-RUN     cd fontforge-2.0.20140101 && ./autogen.sh && ./configure --prefix=/usr && make && make install
 
 ADD     http://dl.fedoraproject.org/pub/fedora/linux/updates/20/x86_64/ttfautohint-1.1-1.fc20.x86_64.rpm /ttfautohint-1.1-1.fc20.x86_64.rpm
 RUN     cd / && alien ttfautohint-1.1-1.fc20.x86_64.rpm
