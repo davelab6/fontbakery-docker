@@ -48,7 +48,9 @@ RUN     mv fontbakery-master /var/www/fontbakery
 
 ADD     https://github.com/googlefonts/fontcrunch/archive/master.zip /fontcrunch.zip
 RUN     unzip foncrunch.zip
-RUN     mv foncrunch-master /var/www/fontbakery/foncrunch
+RUN     cd foncrunch-master
+RUN     make
+RUN     cp quadopt /usr/bin
 
 ADD     local.cfg  /var/www/fontbakery/bakery/local.cfg
 
